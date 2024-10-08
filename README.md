@@ -24,7 +24,7 @@ The user-mode application can manage the logging process by sending commands to 
    - The driver monitors file accesses only for a specified file path (`TargetFilePath`). This path can be modified within the code or configuration.
 
 ### User-Mode Application Design
-The user-mode application communicates with the minifilter driver to receive log entries. It connects to the driver’s communication port and processes the logs.
+The user-mode application communicates with the minifilter driver to receive log entries. It connects to the driverâ€™s communication port and processes the logs.
 
 1. **Setup (`main`)**:
    - The application creates a communication port using `FilterConnectCommunicationPort` to connect with the driver.
@@ -34,7 +34,6 @@ The user-mode application communicates with the minifilter driver to receive log
    - The application receives log entries, which contain the process ID and timestamp of file accesses.
    - These entries are displayed on the console and are logged into a file.
 
-
 ## Running the Sample
 1. **Building**:
    - Open the solution in Visual Studio.
@@ -42,7 +41,11 @@ The user-mode application communicates with the minifilter driver to receive log
 
 2. **Installing the Minifilter Driver**:
    - Open a command prompt with administrative privileges.
-   - To install the minifilter driver, you can right-click on `LoggerFilter.inf` and select "Install," or run the following command:
+   - To install the minifilter driver, you can right-click on `LoggerFilter.inf` and select "Install":
+     
+     ![Install the .inf file](assets/install_inf.png)
+     
+     Or you can run the following command:
      ```bash
      sc create LoggerFilter type= kernel binPath= <path to LoggerFilter.sys>
      ```
@@ -50,15 +53,27 @@ The user-mode application communicates with the minifilter driver to receive log
      ```bash
      sc start LoggerFilter
      ```
+     
+     ![Start the Filter as a service](assets/startService_attachFilter.png)
 
 3. **Communicating with the Driver**:
    - Run the user-mode application (`LoggerFilterApp.exe`) to start receiving log entries.
+     
+     ![Start the Filter as a service](assets/UserApp.png)
+     
    - To attach the minifilter driver to a specific volume (e.g., C:):
      ```bash
      fltmc attach LoggerFilter C:
      ```
+4. **Try to create or open the target file**:
+   - Go to the default target file : c:\Temp\file.txt
+     ![Start the Filter as a service](assets/default_target_file.png)
+     
+   - Check the log file :
+     
+     ![Start the Filter as a service](assets/log_file.png)
 
-4. **Stopping and Uninstalling**:
+6. **Stopping and Uninstalling**:
    - To stop the minifilter driver:
      ```bash
      sc stop LoggerFilter
